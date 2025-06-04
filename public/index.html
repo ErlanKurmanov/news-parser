@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Parser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>News Aggregator</h1>
+
+        <div class="controls">
+            <label for="source-select">Choose a source:</label>
+            <select id="source-select">
+                <option value="vesti">Vesti.kg (Russian)</option>
+                <option value="azattyk">Azattyk (Russian)</option>
+                <option value="rt">RT.com (English)</option>
+            </select>
+            <button id="fetch-button">Load News</button>
+        </div>
+
+        <div id="loading-indicator" style="display: none;">Loading...</div>
+        <div id="error-message" style="display: none; color: red;"></div>
+
+        <div id="news-container">
+        </div>
+
+        <div id="pagination-controls" style="display: none;">
+            <button id="prev-page">Previous</button>
+            <span id="page-info">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+            <button id="next-page">Next</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

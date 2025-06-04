@@ -1,0 +1,40 @@
+services:
+  # PHP-FPM service
+  app:
+    build:
+      context: . # Build context - current directory
+      dockerfile: Dockerfile # Dockerfile name for PHP
+    container_name: news_parser_php
+    restart: unless-stopped
+    volumes:
+      # Mount the current project directory to /var/www/html in the container
+      # This allows real-time code changes without rebuilding the image (for development)
+      # IMPORTANT: the vendor folder will be created by the Dockerfile, but this mount will
+      # override it. This is convenient for development; for production, vendor is usually inside the image.
+      - ./:/var/www/html
+    working_dir: /var/www/html # Set the working directory
+    networks:
+      - app-network
+
+  # Nginx service
+  web:
+    image: nginx:1.25-alpine # Use the official Nginx Alpine image
+    container_name: news_parser_nginx
+    restart: unless-stopped
+    ports:
+      # Map host port 8080 to Nginx container port 80
+      - "8080:80"
+    volumes:
+      # Mount the project code (Nginx needs access to public)
+      - ./:/var/www/html:ro # :ro means read-only; Nginx should not modify the code
+      # Mount our Nginx configuration file
+      - ./nginx.site.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app # Nginx will start after the 'app' service has started
+    networks:
+      - app-network
+
+# Define the network for container interaction
+networks:
+  app-network:
+    driver: bridge
